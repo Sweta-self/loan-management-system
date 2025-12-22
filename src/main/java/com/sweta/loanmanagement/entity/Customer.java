@@ -3,6 +3,8 @@ package com.sweta.loanmanagement.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="customers")
@@ -16,7 +18,8 @@ public class Customer {
     private String phone;
     private LocalDate dateOfBirth;
     private String address;
-
+    @OneToMany(mappedBy="customer",cascade=CascadeType.ALL)
+     List<Loan> loans=new ArrayList<>();
     public Customer() {
     }
 
@@ -76,4 +79,5 @@ public class Customer {
     public void setAddress(String address) {
         this.address = address;
     }
+
 }
