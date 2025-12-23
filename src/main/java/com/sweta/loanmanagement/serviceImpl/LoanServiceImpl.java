@@ -1,7 +1,10 @@
 package com.sweta.loanmanagement.serviceImpl;
 
+import com.sweta.loanmanagement.dto.LoanRequestDTO;
+import com.sweta.loanmanagement.dto.LoanResponseDTO;
 import com.sweta.loanmanagement.entity.Customer;
 import com.sweta.loanmanagement.entity.Loan;
+import com.sweta.loanmanagement.exception.CustomerNotFoundException;
 import com.sweta.loanmanagement.repository.CustomerRepository;
 import com.sweta.loanmanagement.repository.LoanRepository;
 import com.sweta.loanmanagement.service.LoanService;
@@ -21,13 +24,26 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public Loan createLoan(Loan loan) {
-        Long customerId=loan.getCustomer().getId();
+    public LoanResponseDTO createLoan(LoanRequestDTO request) {
+
         Customer customer=
-                customerRepository.findById(customerId)
-                        .orElseThrow(()->new RuntimeException("Customer not found"));
+                customerRepository.findById(request.getCustomerId())
+                        .orElseThrow(()->new CustomerNotFoundException("Customer not found with id:"+request.getCustomerId()));
+        Loan loan=new Loan();
+        loan.setAmount(request.getAmount());
+        loan.setTenureMonths(request.getTenureMonths());
+        loan.setInterestRate(request.getInterestRate());
         loan.setCustomer(customer);
-        return loanRepository.save(loan);
+        Loan savedLoan= loanRepository.save(loan);
+        LoanResponseDTO response=new LoanResponseDTO();
+        response.setLoanId(savedLoan.getId());
+        response.setAmount(savedLoan.getAmount());
+        response.setTenureMonths(savedLoan.getTenureMonths());
+        response.setInterestRate(savedLoan.getInterestRate());
+        response.setCustomerId(customer.getId());
+        response.setCustomerEmail(customer.getEmail());
+        response.setCustomerName(customer.getFullName());
+        return response;
     }
 
     @Override

@@ -1,7 +1,10 @@
 package com.sweta.loanmanagement.controller;
 
+import com.sweta.loanmanagement.dto.LoanRequestDTO;
+import com.sweta.loanmanagement.dto.LoanResponseDTO;
 import com.sweta.loanmanagement.entity.Loan;
 import com.sweta.loanmanagement.service.LoanService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,8 +19,8 @@ public class LoanController {
     }
 
     @PostMapping
-    public Loan createLoan(@RequestBody Loan loan){
-        return loanService.createLoan(loan);
+    public LoanResponseDTO createLoan(@RequestBody @Valid LoanRequestDTO request){
+        return loanService.createLoan(request);
     }
     @GetMapping
     public List<Loan>getAllLoans(){
