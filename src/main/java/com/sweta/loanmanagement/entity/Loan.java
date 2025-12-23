@@ -1,5 +1,6 @@
 package com.sweta.loanmanagement.entity;
 
+import com.sweta.loanmanagement.enums.LoanStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -14,7 +15,16 @@ public class Loan {
     private Double amount;
     private Integer tenureMonths;
     private Double interestRate;
+
     private LocalDate startDate;
+
+    @PrePersist
+    public void onCreate(){
+        this.startDate=LocalDate.now();
+    }
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private LoanStatus status;
 
     //Many loans belong to one customer
     @ManyToOne
@@ -24,13 +34,13 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(Long id, Double amount, Integer tenureMonths, Double interestRate, LocalDate startDate) {
+    public Loan(Long id, Double amount, Integer tenureMonths, Double interestRate, LocalDate startDate,LoanStatus status) {
         this.id = id;
         this.amount = amount;
         this.tenureMonths = tenureMonths;
         this.interestRate = interestRate;
         this.startDate = startDate;
-
+        this.status=status;
     }
 
     public Long getId() {
@@ -79,5 +89,13 @@ public class Loan {
 
     public void setCustomer(Customer customer) {
         this.customer = customer;
+    }
+
+    public LoanStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LoanStatus status) {
+        this.status = status;
     }
 }

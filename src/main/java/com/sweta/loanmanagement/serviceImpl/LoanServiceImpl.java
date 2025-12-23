@@ -2,14 +2,18 @@ package com.sweta.loanmanagement.serviceImpl;
 
 import com.sweta.loanmanagement.dto.LoanRequestDTO;
 import com.sweta.loanmanagement.dto.LoanResponseDTO;
+import com.sweta.loanmanagement.dto.LoanUpdateRequestDTO;
 import com.sweta.loanmanagement.entity.Customer;
 import com.sweta.loanmanagement.entity.Loan;
+import com.sweta.loanmanagement.enums.LoanStatus;
 import com.sweta.loanmanagement.exception.CustomerNotFoundException;
+import com.sweta.loanmanagement.exception.LoanNotFoundException;
 import com.sweta.loanmanagement.repository.CustomerRepository;
 import com.sweta.loanmanagement.repository.LoanRepository;
 import com.sweta.loanmanagement.service.LoanService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -34,6 +38,8 @@ public class LoanServiceImpl implements LoanService {
         loan.setTenureMonths(request.getTenureMonths());
         loan.setInterestRate(request.getInterestRate());
         loan.setCustomer(customer);
+        loan.setStatus(LoanStatus.CREATED);
+
         Loan savedLoan= loanRepository.save(loan);
         LoanResponseDTO response=new LoanResponseDTO();
         response.setLoanId(savedLoan.getId());
@@ -43,11 +49,39 @@ public class LoanServiceImpl implements LoanService {
         response.setCustomerId(customer.getId());
         response.setCustomerEmail(customer.getEmail());
         response.setCustomerName(customer.getFullName());
+        response.setStatus(LoanStatus.CREATED);
         return response;
     }
 
     @Override
     public List<Loan> getAllLoans() {
         return loanRepository.findAll();
+    }
+private LoanResponseDTO mapToLoanResponse(Loan loan) {
+    LoanResponseDTO dto=new LoanResponseDTO();
+    dto.setLoanId(loan.getId());
+    dto.setAmount(loan.getAmount());
+    dto.setTenureMonths(loan.getTenureMonths());
+    dto.setStatus(loan.getStatus());
+    dto.setCustomerId(loan.getCustomer().getId());
+    dto.setCustomerEmail(loan.getCustomer().getEmail());
+    dto.setCustomerName(loan.getCustomer().getFullName());
+    return dto;
+}
+    @Override
+    public LoanResponseDTO updateLoan(Long loanId, LoanUpdateRequestDTO request) {
+        Loan loan=loanRepository.findById(loanId)
+                .orElseThrow(()->new LoanNotFoundException("Loan not found with id"+loanId));
+        if(request.getLoanAmount()!=null){
+            loan.setAmount(request.getLoanAmount());
+        }
+        if(request.getTenure()!=null){
+            loan.setTenureMonths(request.getTenure());
+        }
+        if(request.getStatus()!=null){
+            loan.setStatus(request.getStatus());
+        }
+        Loan updatedLoan=loanRepository.save(loan);
+        return mapToLoanResponse(updatedLoan);
     }
 }

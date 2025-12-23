@@ -1,25 +1,36 @@
 package com.sweta.loanmanagement.dto;
 
+import com.sweta.loanmanagement.enums.LoanStatus;
+
 public class LoanResponseDTO {
     private Long loanId;
     private Double amount;
     private Integer tenureMonths;
-    private Double InterestRate;
+    private Double interestRate;
     private Long customerId;
     private String customerName;
     private String customerEmail;
-
+  private LoanStatus status;
     public LoanResponseDTO() {
     }
 
-    public LoanResponseDTO(Long loanId, Double amount, Integer tenureMonths, Double interestRate, Long customerId, String customerName, String customerEmail) {
+    public LoanStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(LoanStatus status) {
+        this.status = status;
+    }
+
+    public LoanResponseDTO(Long loanId, Double amount, Integer tenureMonths, Double interestRate, Long customerId, String customerName, String customerEmail,LoanStatus status) {
         this.loanId = loanId;
         this.amount = amount;
         this.tenureMonths = tenureMonths;
-        InterestRate = interestRate;
+        this.interestRate = interestRate;
         this.customerId = customerId;
         this.customerName = customerName;
         this.customerEmail = customerEmail;
+        this.status = status;
     }
 
     public Long getLoanId() {
@@ -35,7 +46,7 @@ public class LoanResponseDTO {
     }
 
     public Double getInterestRate() {
-        return InterestRate;
+        return interestRate;
     }
 
     public Long getCustomerId() {
@@ -63,7 +74,7 @@ public class LoanResponseDTO {
     }
 
     public void setInterestRate(Double interestRate) {
-        InterestRate = interestRate;
+        this.interestRate = interestRate;
     }
 
     public void setCustomerId(Long customerId) {
