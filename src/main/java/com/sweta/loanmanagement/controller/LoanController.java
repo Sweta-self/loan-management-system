@@ -5,6 +5,7 @@ import com.sweta.loanmanagement.dto.LoanResponseDTO;
 import com.sweta.loanmanagement.dto.LoanUpdateRequestDTO;
 import com.sweta.loanmanagement.entity.Loan;
 import com.sweta.loanmanagement.service.LoanService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/loans")
+@Tag(name="Loan APIs",description="Loan Management APIs")
 public class LoanController {
     private final LoanService loanService;
 
