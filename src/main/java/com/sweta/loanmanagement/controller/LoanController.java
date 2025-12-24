@@ -6,6 +6,7 @@ import com.sweta.loanmanagement.dto.LoanUpdateRequestDTO;
 import com.sweta.loanmanagement.entity.Loan;
 import com.sweta.loanmanagement.service.LoanService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +26,14 @@ public class LoanController {
         return loanService.createLoan(request);
     }
     @GetMapping
-    public List<Loan>getAllLoans(){
-        return loanService.getAllLoans();
+    public ResponseEntity<Page<LoanResponseDTO>>getAllLoans(
+            @RequestParam(defaultValue = "0")int page,
+            @RequestParam(defaultValue = "5")int size,
+            @RequestParam(defaultValue = "loanId")String sortBy,
+            @RequestParam(defaultValue = "asc")String direction){
+        return ResponseEntity.ok(loanService.getAllLoans(page,size,sortBy,direction));
     }
+
     @PutMapping("/{loanId}")
     public ResponseEntity<LoanResponseDTO>updateLoan(
             @PathVariable Long loanId,

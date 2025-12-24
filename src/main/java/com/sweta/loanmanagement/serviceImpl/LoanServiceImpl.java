@@ -11,6 +11,10 @@ import com.sweta.loanmanagement.exception.LoanNotFoundException;
 import com.sweta.loanmanagement.repository.CustomerRepository;
 import com.sweta.loanmanagement.repository.LoanRepository;
 import com.sweta.loanmanagement.service.LoanService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -55,9 +59,15 @@ public class LoanServiceImpl implements LoanService {
     }
 
     @Override
-    public List<Loan> getAllLoans() {
-        return loanRepository.findAll();
+    public Page<LoanResponseDTO> getAllLoans(int page, int size, String sortBy, String direction) {
+Sort sort=direction.equalsIgnoreCase("desc")
+        ? Sort.by(sortBy).descending()
+        :Sort.by(sortBy).ascending();
+        Pageable pageable= PageRequest.of(page,size,sort);
+        Page<Loan>loanPage=loanRepository.findAll(pageable);
+        return loanPage.map(this::mapToLoanResponse);
     }
+
 private LoanResponseDTO mapToLoanResponse(Loan loan) {
     LoanResponseDTO dto=new LoanResponseDTO();
     dto.setLoanId(loan.getId());
