@@ -4,6 +4,7 @@ import com.sweta.loanmanagement.dto.LoanRequestDTO;
 import com.sweta.loanmanagement.dto.LoanResponseDTO;
 import com.sweta.loanmanagement.dto.LoanUpdateRequestDTO;
 import com.sweta.loanmanagement.entity.Loan;
+import com.sweta.loanmanagement.enums.LoanStatus;
 import com.sweta.loanmanagement.service.LoanService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,7 +32,7 @@ public class LoanController {
     public ResponseEntity<Page<LoanResponseDTO>>getAllLoans(
             @RequestParam(defaultValue = "0")int page,
             @RequestParam(defaultValue = "5")int size,
-            @RequestParam(defaultValue = "loanId")String sortBy,
+            @RequestParam(defaultValue = "id")String sortBy,
             @RequestParam(defaultValue = "asc")String direction){
         return ResponseEntity.ok(loanService.getAllLoans(page,size,sortBy,direction));
     }
@@ -50,5 +51,21 @@ public class LoanController {
     @GetMapping("/customers/{customerId}")
     public ResponseEntity<List<LoanResponseDTO>>getLoansByCustomer(@PathVariable Long customerId){
         return ResponseEntity.ok(loanService.getLoansByCustomerId(customerId));
+    }
+    @GetMapping("/search")
+    public ResponseEntity<Page<LoanResponseDTO>>searchLoans(
+            @RequestParam(required=false)LoanStatus status,
+            @RequestParam(required=false)Double amount,
+            @RequestParam(required=false)Integer tenureMonths,
+            @RequestParam(defaultValue = "0")int page,
+            @RequestParam(defaultValue = "10")int size,
+            @RequestParam(defaultValue = "id")String sortBy,
+            @RequestParam(defaultValue = "desc")String sortDir
+
+            )
+    {
+        return ResponseEntity.ok(loanService.searchLoans(
+                status,amount,tenureMonths,page,size,sortBy,sortDir
+        ));
     }
 }

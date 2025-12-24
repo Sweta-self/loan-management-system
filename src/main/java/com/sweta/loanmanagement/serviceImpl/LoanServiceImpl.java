@@ -11,6 +11,7 @@ import com.sweta.loanmanagement.exception.LoanNotFoundException;
 import com.sweta.loanmanagement.repository.CustomerRepository;
 import com.sweta.loanmanagement.repository.LoanRepository;
 import com.sweta.loanmanagement.service.LoanService;
+import com.sweta.loanmanagement.specification.LoanSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -114,5 +115,18 @@ private LoanResponseDTO mapToLoanResponse(Loan loan) {
         //step 3.map to responseDto
         return loans.stream().map(this::mapToLoanResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<LoanResponseDTO> searchLoans(LoanStatus status, Double amount, Integer tenureMonths, int page, int size, String sortBy, String sortDir) {
+        Sort sort=sortBy.equalsIgnoreCase("asc")
+                ?Sort.by(sortBy).ascending()
+                :Sort.by(sortBy).descending();
+        Pageable pageable=PageRequest.of(page,size,sort);
+        Page<Loan>loanPage=loanRepository.findAll(LoanSpecification.search(
+                status,amount,tenureMonths
+        ),
+                pageable);
+        return loanPage.map(this::mapToLoanResponse);
     }
 }
