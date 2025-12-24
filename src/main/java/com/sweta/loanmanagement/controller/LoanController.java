@@ -34,4 +34,13 @@ public class LoanController {
             @RequestBody LoanUpdateRequestDTO request){
         return ResponseEntity.ok(loanService.updateLoan(loanId, request));
     }
+    @GetMapping("/getLoanById/{loanId}")
+    public ResponseEntity<LoanResponseDTO>getLoanById(@PathVariable Long loanId){
+        return ResponseEntity.ok(loanService.getLoanById(loanId));
+    }
+
+    @GetMapping("/customers/{customerId}")
+    public ResponseEntity<List<LoanResponseDTO>>getLoansByCustomer(@PathVariable Long customerId){
+        return ResponseEntity.ok(loanService.getLoansByCustomerId(customerId));
+    }
 }

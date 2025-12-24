@@ -21,6 +21,7 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>(error,HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(LoanNotFoundException.class)
     public ResponseEntity<ErrorResponse>handleLoanNotFound(LoanNotFoundException ex){
         ErrorResponse error=new ErrorResponse(
                 HttpStatus.NOT_FOUND.value(),

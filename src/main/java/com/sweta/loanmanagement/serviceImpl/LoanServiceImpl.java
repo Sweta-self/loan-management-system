@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LoanServiceImpl implements LoanService {
@@ -83,5 +84,25 @@ private LoanResponseDTO mapToLoanResponse(Loan loan) {
         }
         Loan updatedLoan=loanRepository.save(loan);
         return mapToLoanResponse(updatedLoan);
+    }
+
+    @Override
+    public LoanResponseDTO getLoanById(Long loanId) {
+        Loan loan=loanRepository.findById(loanId)
+                .orElseThrow(()-> new LoanNotFoundException("Loan not found with id"+loanId));
+        return mapToLoanResponse(loan);
+    }
+
+    @Override
+    public List<LoanResponseDTO> getLoansByCustomerId(Long customerId) {
+        //step1 validate customer exists
+        Customer customer=customerRepository.findById(customerId)
+                .orElseThrow(()->new CustomerNotFoundException("Customer not found" +
+                        "with id"+customerId));
+        //step 2 fetch loans
+        List<Loan>loans=loanRepository.findByCustomerId(customerId);
+        //step 3.map to responseDto
+        return loans.stream().map(this::mapToLoanResponse)
+                .collect(Collectors.toList());
     }
 }

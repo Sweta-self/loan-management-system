@@ -11,4 +11,6 @@ public interface LoanService {
     LoanResponseDTO createLoan(LoanRequestDTO request);
     List<Loan> getAllLoans();
     LoanResponseDTO updateLoan(Long loadId, LoanUpdateRequestDTO request);
+    LoanResponseDTO getLoanById(Long loanId);
+    List<LoanResponseDTO>getLoansByCustomerId(Long customerId);
 }
