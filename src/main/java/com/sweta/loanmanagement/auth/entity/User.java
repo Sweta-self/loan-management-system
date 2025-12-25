@@ -1,6 +1,6 @@
-package com.sweta.loanmanagement.entity;
+package com.sweta.loanmanagement.auth.entity;
 
-import com.sweta.loanmanagement.enums.Role;
+import com.sweta.loanmanagement.auth.enums.Role;
 import jakarta.persistence.*;
 
 @Entity

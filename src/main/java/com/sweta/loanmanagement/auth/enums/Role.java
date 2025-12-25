@@ -1,4 +1,4 @@
-package com.sweta.loanmanagement.enums;
+package com.sweta.loanmanagement.auth.enums;
 
 public enum Role {
     ROLE_USER,

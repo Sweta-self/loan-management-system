@@ -1,6 +1,6 @@
-package com.sweta.loanmanagement.repository;
+package com.sweta.loanmanagement.auth.repository;
 
-import com.sweta.loanmanagement.entity.User;
+import com.sweta.loanmanagement.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
