@@ -16,5 +16,5 @@ public interface LoanService {
     LoanResponseDTO updateLoan(Long loadId, LoanUpdateRequestDTO request);
     LoanResponseDTO getLoanById(Long loanId);
     List<LoanResponseDTO>getLoansByCustomerId(Long customerId);
-    Page<LoanResponseDTO>searchLoans(LoanStatus status, Double amount, Integer tenureMonths, LocalDate startDate,int page, int size, String sortBy, String sortDir);
+    Page<LoanResponseDTO>searchLoans(LoanStatus status, Double amount, Integer tenureMonths, String fullName,LocalDate startDate,int page, int size, String sortBy, String sortDir);
 }

@@ -59,6 +59,7 @@ public class LoanController {
             @RequestParam(required=false)LoanStatus status,
             @RequestParam(required=false)Double amount,
             @RequestParam(required=false)Integer tenureMonths,
+            @RequestParam(required=false)String fullName,
 
             @RequestParam(required=false)
             @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
@@ -72,7 +73,7 @@ public class LoanController {
             )
     {
         return ResponseEntity.ok(loanService.searchLoans(
-                status,amount,tenureMonths,startDate,page,size,sortBy,sortDir
+                status,amount,tenureMonths,fullName,startDate,page,size,sortBy,sortDir
         ));
     }
 }

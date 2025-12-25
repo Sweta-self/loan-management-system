@@ -119,13 +119,13 @@ private LoanResponseDTO mapToLoanResponse(Loan loan) {
     }
 
     @Override
-    public Page<LoanResponseDTO> searchLoans(LoanStatus status, Double amount, Integer tenureMonths, LocalDate startDate, int page, int size, String sortBy, String sortDir) {
+    public Page<LoanResponseDTO> searchLoans(LoanStatus status, Double amount, Integer tenureMonths,String fullName, LocalDate startDate, int page, int size, String sortBy, String sortDir) {
         Sort sort=sortBy.equalsIgnoreCase("asc")
                 ?Sort.by(sortBy).ascending()
                 :Sort.by(sortBy).descending();
         Pageable pageable=PageRequest.of(page,size,sort);
         Page<Loan>loanPage=loanRepository.findAll(LoanSpecification.search(
-                status,amount,tenureMonths,startDate
+                status,amount,tenureMonths,fullName,startDate
         ),
                 pageable);
         return loanPage.map(this::mapToLoanResponse);
