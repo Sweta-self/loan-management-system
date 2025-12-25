@@ -7,6 +7,7 @@ import com.sweta.loanmanagement.entity.Loan;
 import com.sweta.loanmanagement.enums.LoanStatus;
 import org.springframework.data.domain.Page;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface LoanService {
@@ -15,5 +16,5 @@ public interface LoanService {
     LoanResponseDTO updateLoan(Long loadId, LoanUpdateRequestDTO request);
     LoanResponseDTO getLoanById(Long loanId);
     List<LoanResponseDTO>getLoansByCustomerId(Long customerId);
-    Page<LoanResponseDTO>searchLoans(LoanStatus status,Double amount,Integer tenureMonths,int page,int size,String sortBy,String sortDir);
+    Page<LoanResponseDTO>searchLoans(LoanStatus status, Double amount, Integer tenureMonths, LocalDate startDate,int page, int size, String sortBy, String sortDir);
 }

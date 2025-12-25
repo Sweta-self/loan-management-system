@@ -5,6 +5,7 @@ import com.sweta.loanmanagement.enums.LoanStatus;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +13,8 @@ public class LoanSpecification {
     public static Specification<Loan> search(
             LoanStatus status,
             Double amount,
-            Integer tenureMonths
+            Integer tenureMonths,
+            LocalDate startDate
 
 
     ) {
@@ -27,6 +29,9 @@ public class LoanSpecification {
             }
             if(tenureMonths!=null){
                 predicates.add(cb.greaterThanOrEqualTo(root.get("tenureMonths"),tenureMonths));
+            }
+            if(startDate!=null){
+                predicates.add(cb.greaterThanOrEqualTo(root.get("startDate"),startDate));
             }
             return cb.and(predicates.toArray(new Predicate[0]));
         };

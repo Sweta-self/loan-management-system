@@ -9,9 +9,11 @@ import com.sweta.loanmanagement.service.LoanService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -57,6 +59,11 @@ public class LoanController {
             @RequestParam(required=false)LoanStatus status,
             @RequestParam(required=false)Double amount,
             @RequestParam(required=false)Integer tenureMonths,
+
+            @RequestParam(required=false)
+            @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
+            LocalDate startDate,
+
             @RequestParam(defaultValue = "0")int page,
             @RequestParam(defaultValue = "10")int size,
             @RequestParam(defaultValue = "id")String sortBy,
@@ -65,7 +72,7 @@ public class LoanController {
             )
     {
         return ResponseEntity.ok(loanService.searchLoans(
-                status,amount,tenureMonths,page,size,sortBy,sortDir
+                status,amount,tenureMonths,startDate,page,size,sortBy,sortDir
         ));
     }
 }
