@@ -16,6 +16,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    public User() {
+    }
+
     public User(Long id, String email, String password, Role role) {
         this.id = id;
         this.email = email;

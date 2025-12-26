@@ -8,6 +8,8 @@ public class LoanmanagementApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(LoanmanagementApplication.class, args);
-	}
+
+
+        }
 
 }
