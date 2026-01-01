@@ -6,16 +6,18 @@ import com.sweta.loanmanagement.dto.LoanUpdateRequestDTO;
 import com.sweta.loanmanagement.entity.Loan;
 import com.sweta.loanmanagement.enums.LoanStatus;
 import com.sweta.loanmanagement.service.LoanService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@SecurityRequirement(name="bearerAuth")
 @RestController
 @RequestMapping("/api/loans")
 @Tag(name="Loan APIs",description="Loan Management APIs")
@@ -30,6 +32,7 @@ public class LoanController {
     public LoanResponseDTO createLoan(@RequestBody @Valid LoanRequestDTO request){
         return loanService.createLoan(request);
     }
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping
     public ResponseEntity<Page<LoanResponseDTO>>getAllLoans(
             @RequestParam(defaultValue = "0")int page,
@@ -38,7 +41,7 @@ public class LoanController {
             @RequestParam(defaultValue = "asc")String direction){
         return ResponseEntity.ok(loanService.getAllLoans(page,size,sortBy,direction));
     }
-
+@PreAuthorize("hasAnyRole('USER','ADMIN')")
     @PutMapping("/{loanId}")
     public ResponseEntity<LoanResponseDTO>updateLoan(
             @PathVariable Long loanId,
