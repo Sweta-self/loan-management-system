@@ -2,8 +2,11 @@ package com.sweta.loanmanagement.entity;
 
 import com.sweta.loanmanagement.enums.LoanStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name="loans")
@@ -16,12 +19,20 @@ public class Loan {
     private Integer tenureMonths;
     private Double interestRate;
 
-    private LocalDate startDate;
+   // private LocalDate startDate;
 
-    @PrePersist
-    public void onCreate(){
-        this.startDate=LocalDate.now();
-    }
+//    @PrePersist
+//    public void onCreate(){
+//        this.startDate=LocalDate.now();
+//    }
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LoanStatus status;
@@ -34,12 +45,12 @@ public class Loan {
     public Loan() {
     }
 
-    public Loan(Long id, Double amount, Integer tenureMonths, Double interestRate, LocalDate startDate,LoanStatus status) {
+    public Loan(Long id, Double amount, Integer tenureMonths, Double interestRate,LoanStatus status) {
         this.id = id;
         this.amount = amount;
         this.tenureMonths = tenureMonths;
         this.interestRate = interestRate;
-        this.startDate = startDate;
+
         this.status=status;
     }
 
@@ -58,9 +69,12 @@ public class Loan {
     public Double getInterestRate() {
         return interestRate;
     }
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 
-    public LocalDate getStartDate() {
-        return startDate;
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
     }
 
     public Customer getCustomer() {
@@ -83,9 +97,7 @@ public class Loan {
         this.interestRate = interestRate;
     }
 
-    public void setStartDate(LocalDate startDate) {
-        this.startDate = startDate;
-    }
+
 
     public void setCustomer(Customer customer) {
         this.customer = customer;

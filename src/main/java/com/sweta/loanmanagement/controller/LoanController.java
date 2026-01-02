@@ -16,6 +16,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 @SecurityRequirement(name="bearerAuth")
 @RestController
@@ -66,7 +67,11 @@ public class LoanController {
 
             @RequestParam(required=false)
             @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
-            LocalDate startDate,
+            LocalDateTime createdAt,
+
+            @RequestParam(required=false)
+            @DateTimeFormat(iso=DateTimeFormat.ISO.DATE)
+            LocalDateTime updatedAt,
 
             @RequestParam(defaultValue = "0")int page,
             @RequestParam(defaultValue = "10")int size,
@@ -76,7 +81,7 @@ public class LoanController {
             )
     {
         return ResponseEntity.ok(loanService.searchLoans(
-                status,amount,tenureMonths,fullName,startDate,page,size,sortBy,sortDir
+                status,amount,tenureMonths,fullName,createdAt,updatedAt,page,size,sortBy,sortDir
         ));
     }
 }

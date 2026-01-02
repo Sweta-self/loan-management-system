@@ -8,6 +8,7 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public class LoanSpecification {
             Double amount,
             Integer tenureMonths,
             String fullName,
-            LocalDate startDate
+           LocalDateTime createdAt,
+            LocalDateTime updatedAt
 
 
     ) {
@@ -41,8 +43,11 @@ public class LoanSpecification {
                                 "%"+fullName.toLowerCase()+"%")
                 );
             }
-            if(startDate!=null){
-                predicates.add(cb.greaterThanOrEqualTo(root.get("startDate"),startDate));
+            if(createdAt!=null){
+                predicates.add(cb.greaterThanOrEqualTo(root.get("createdAt"),createdAt));
+            }
+            if(updatedAt!=null){
+                predicates.add(cb.greaterThanOrEqualTo(root.get("updatedAt"),updatedAt));
             }
             return cb.and(predicates.toArray(new Predicate[0]));
         };
