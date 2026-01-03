@@ -1,5 +1,6 @@
 package com.sweta.loanmanagement.entity;
 
+import com.sweta.loanmanagement.auth.entity.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -7,19 +8,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="customers")
+@Table(name = "customers")
 public class Customer {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String fullName;
     private String email;
     private String phone;
     private LocalDate dateOfBirth;
     private String address;
-    @OneToMany(mappedBy="customer",cascade=CascadeType.ALL)
-     List<Loan> loans=new ArrayList<>();
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    List<Loan> loans = new ArrayList<>();
+
+
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public Customer() {
     }
 

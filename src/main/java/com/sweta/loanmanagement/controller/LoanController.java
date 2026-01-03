@@ -92,4 +92,9 @@ public class LoanController {
     ){
         return ResponseEntity.ok(loanService.updateLoanStatus(loanId,newStatus));
     }
+@GetMapping("/myloans")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<List<LoanResponseDTO>>getMyLoans(){
+        return ResponseEntity.ok(loanService.getMyLoans());
+}
 }

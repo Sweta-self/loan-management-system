@@ -10,12 +10,14 @@ import com.sweta.loanmanagement.exception.CustomerNotFoundException;
 import com.sweta.loanmanagement.exception.LoanNotFoundException;
 import com.sweta.loanmanagement.repository.CustomerRepository;
 import com.sweta.loanmanagement.repository.LoanRepository;
+import com.sweta.loanmanagement.service.AuthHelperService;
 import com.sweta.loanmanagement.service.LoanService;
 import com.sweta.loanmanagement.specification.LoanSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -28,10 +30,12 @@ public class LoanServiceImpl implements LoanService {
 
     private final LoanRepository loanRepository;
     private final CustomerRepository customerRepository;
+    private final AuthHelperService authHelperService;
 
-    public LoanServiceImpl(LoanRepository loanRepository, CustomerRepository customerRepository) {
+    public LoanServiceImpl(LoanRepository loanRepository, CustomerRepository customerRepository, AuthHelperService authHelperService) {
         this.loanRepository = loanRepository;
         this.customerRepository = customerRepository;
+        this.authHelperService = authHelperService;
     }
 
     @Override
@@ -85,6 +89,10 @@ private LoanResponseDTO mapToLoanResponse(Loan loan) {
     public LoanResponseDTO updateLoan(Long loanId, LoanUpdateRequestDTO request) {
         Loan loan=loanRepository.findById(loanId)
                 .orElseThrow(()->new LoanNotFoundException("Loan not found with id"+loanId));
+        Customer loggedInUser=authHelperService.getLoggedInCustomer();
+        if(!loan.getCustomer().getId().equals(loggedInUser.getId())){
+            throw new RuntimeException("You are not allowed to update this loan");
+        }
         if(request.getLoanAmount()!=null){
             loan.setAmount(request.getLoanAmount());
         }
@@ -153,5 +161,12 @@ private LoanResponseDTO mapToLoanResponse(Loan loan) {
         ),
                 pageable);
         return loanPage.map(this::mapToLoanResponse);
+    }
+    public List<LoanResponseDTO> getMyLoans(){
+        Customer customer=
+                authHelperService.getLoggedInCustomer();
+        List<Loan>loans=loanRepository.findByCustomerId(customer.getId());
+        return loans.stream().map(this::mapToLoanResponse)
+                .collect(Collectors.toList());
     }
 }

@@ -5,12 +5,11 @@ import com.sweta.loanmanagement.enums.LoanStatus;
 public class LoanUpdateRequestDTO {
     private Double loanAmount;
     private Integer tenure;
-    private LoanStatus status;
 
-    public LoanUpdateRequestDTO(Double loanAmount, Integer tenure, LoanStatus status) {
+    public LoanUpdateRequestDTO(Double loanAmount, Integer tenure) {
         this.loanAmount = loanAmount;
         this.tenure = tenure;
-        this.status = status;
+
     }
 
     public Double getLoanAmount() {
@@ -21,9 +20,6 @@ public class LoanUpdateRequestDTO {
         return tenure;
     }
 
-    public LoanStatus getStatus() {
-        return status;
-    }
 
     public void setTenure(Integer tenure) {
         this.tenure = tenure;
@@ -33,7 +29,5 @@ public class LoanUpdateRequestDTO {
         this.loanAmount = loanAmount;
     }
 
-    public void setStatus(LoanStatus status) {
-        this.status = status;
-    }
+
 }
