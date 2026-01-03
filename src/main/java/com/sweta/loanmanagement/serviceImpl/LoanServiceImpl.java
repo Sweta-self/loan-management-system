@@ -91,11 +91,35 @@ private LoanResponseDTO mapToLoanResponse(Loan loan) {
         if(request.getTenure()!=null){
             loan.setTenureMonths(request.getTenure());
         }
-        if(request.getStatus()!=null){
-            loan.setStatus(request.getStatus());
-        }
+        //moving status updation restricted to admin only
+//        if(request.getStatus()!=null){
+//            loan.setStatus(request.getStatus());
+//        }
         Loan updatedLoan=loanRepository.save(loan);
         return mapToLoanResponse(updatedLoan);
+    }
+
+    @Override
+    public LoanResponseDTO updateLoanStatus(Long loanId, LoanStatus newStatus) {
+       Loan loan=loanRepository.findById(loanId)
+               .orElseThrow(()->new LoanNotFoundException("Loan not found"));
+       LoanStatus currentStatus = loan.getStatus();
+
+       //already finalized
+        if(currentStatus ==LoanStatus.REJECTED ||currentStatus==LoanStatus.CLOSED){
+            throw new IllegalStateException("Loan status cannot be changed");
+        }
+        //invalid transition
+        if(currentStatus==LoanStatus.CREATED && newStatus== LoanStatus.CLOSED){
+            throw new IllegalStateException("Loan must be approved before closing");
+        }
+        //approved loan cannot go back
+        if(currentStatus==LoanStatus.APPROVED && newStatus==LoanStatus.CREATED){
+            throw  new IllegalStateException("Invalid state transition");
+        }
+        loan.setStatus(newStatus);
+        loanRepository.save(loan);
+        return mapToLoanResponse(loan);
     }
 
     @Override

@@ -84,4 +84,12 @@ public class LoanController {
                 status,amount,tenureMonths,fullName,createdAt,updatedAt,page,size,sortBy,sortDir
         ));
     }
+    @PreAuthorize("hasRole('ADMIN')")
+    @PutMapping("/updateStatus/{loanId}")
+    public ResponseEntity<LoanResponseDTO>updateLoanStatus(
+            @PathVariable Long loanId,
+            @RequestBody LoanStatus newStatus
+    ){
+        return ResponseEntity.ok(loanService.updateLoanStatus(loanId,newStatus));
+    }
 }
