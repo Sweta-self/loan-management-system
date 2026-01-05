@@ -3,12 +3,16 @@ package com.sweta.loanmanagement.entity;
 import com.sweta.loanmanagement.enums.LoanStatus;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@SQLDelete(sql="UPDATE loans SET deleted=true WHERE id=?")
+@SQLRestriction("deleted = false")
 @Table(name="loans")
 public class Loan {
 
@@ -41,7 +45,7 @@ public class Loan {
     @ManyToOne
     @JoinColumn(name="customer_id")
     private Customer customer;
-
+private boolean deleted=false;
     public Loan() {
     }
 

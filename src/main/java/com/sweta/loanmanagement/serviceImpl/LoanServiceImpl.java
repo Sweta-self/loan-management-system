@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.nio.file.AccessDeniedException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -162,6 +163,18 @@ private LoanResponseDTO mapToLoanResponse(Loan loan) {
                 pageable);
         return loanPage.map(this::mapToLoanResponse);
     }
+
+    @Override
+    public void deleteLoan(Long loanId) {
+        Loan loan=loanRepository.findById(loanId)
+                        .orElseThrow(()->new LoanNotFoundException("Loan not found"));
+        Customer loggedInCustomer=authHelperService.getLoggedInCustomer();
+        if(!loan.getCustomer().getId().equals(loggedInCustomer.getId())){
+            throw new RuntimeException("You are not allowed to delete this loan");
+        }
+        loanRepository.delete(loan);
+    }
+
     public List<LoanResponseDTO> getMyLoans(){
         Customer customer=
                 authHelperService.getLoggedInCustomer();

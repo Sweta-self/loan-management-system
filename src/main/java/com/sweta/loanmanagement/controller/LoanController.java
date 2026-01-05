@@ -97,4 +97,12 @@ public class LoanController {
     public ResponseEntity<List<LoanResponseDTO>>getMyLoans(){
         return ResponseEntity.ok(loanService.getMyLoans());
 }
+@DeleteMapping("/delete/{loanId}")
+    @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public ResponseEntity<Void>deleteLoan(
+        @PathVariable Long loanId){
+        loanService.deleteLoan(loanId);
+        return ResponseEntity.noContent().build();
+}
+
 }

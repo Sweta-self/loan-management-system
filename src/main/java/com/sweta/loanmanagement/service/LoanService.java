@@ -27,4 +27,6 @@ public interface LoanService {
     List<LoanResponseDTO> getMyLoans();
 
     Page<LoanResponseDTO> searchLoans(LoanStatus status, Double amount, Integer tenureMonths, String fullName, LocalDateTime createdAt, LocalDateTime updatedAt, int page, int size, String sortBy, String sortDir);
+
+    void deleteLoan(Long loanId);
 }
